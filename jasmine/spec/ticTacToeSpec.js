@@ -13,7 +13,7 @@ describe("TicTacToe", function() {
   describe("When first move has been made", function() {
 
     beforeEach(function() {
-      ticTacToe.play(1, 22);
+      ticTacToe.play(1, [1,1]);
     });
 
     it("one change has happened to the board", function() {
