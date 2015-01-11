@@ -330,12 +330,12 @@ describe("TicTacToe", function () {
             });
         });
 
-        describe("and blocking opponent fork is possible", function () {
+        describe("and forking is possible, then try to fork", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
 
-            it("Opponent left fork is blocked", function () {
+            it("Left fork oppurtunity is exploited", function () {
 
             });
         });

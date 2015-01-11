@@ -30,8 +30,6 @@ var TicTacToe = function () {
         discoverADraw();
     }
 
-
-
     var tryMoveForWin = function(player, move){
         var tempGame = getTempGameWithSameBoard();
         //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
@@ -54,6 +52,18 @@ var TicTacToe = function () {
             }
         }
         return allPossibleMoves;
+    }
+
+    var getWinningMoves = function(player){
+            var winningMoves = [];
+            var allPossibleMoves = getAllPossibleMoves();
+            for (i in allPossibleMoves) {
+                var possibleMove = allPossibleMoves[i];
+                if (tryMoveForWin(player, possibleMove) === true) {
+                    winningMoves.push(possibleMove);                    
+                }
+            }
+            return winningMoves;
     }
 
     function getTempGameWithSameBoard() {
@@ -169,31 +179,25 @@ var TicTacToe = function () {
             if(isAutoPlayInProgress == false)
                 return;
 
-            var allPossibleMoves = getAllPossibleMoves();
-            for (i in allPossibleMoves) {
-                var possibleMove = allPossibleMoves[i];
-                if (tryMoveForWin(player, possibleMove) === true) {
-                    play(player, possibleMove);
-                    isAutoPlayInProgress = false;
-                    break;
-                }
-            }
+             winningMoves = getWinningMoves(player);
+             if(winningMoves.length > 0){
+                play(player, winningMoves[0]);
+                isAutoPlayInProgress = false;
+             }
+
         }(player);
 
         var autoPlayToBlockWinningOpponent = function (player) {
 
             if(isAutoPlayInProgress == false)
                 return;
-            var allPossibleMoves = getAllPossibleMoves();
-            var opponentPlayer = getPlayerOponent(player);
-            for (i in allPossibleMoves) {
-                var possibleMove = allPossibleMoves[i];
-                if (tryMoveForWin(opponentPlayer, possibleMove) === true) {
-                    play(player, possibleMove);
-                    isAutoPlayInProgress = false;
-                    break;
-                }
-            }
+
+             var opponentPlayer = getPlayerOponent(player);
+             opponentWinningMoves = getWinningMoves(opponentPlayer);
+             if(opponentWinningMoves.length > 0){
+                play(player, opponentWinningMoves[0]);
+                isAutoPlayInProgress = false;
+             }
         }(player);
 
         var autoPlayFillTheLastPossibleCell= function(player){
