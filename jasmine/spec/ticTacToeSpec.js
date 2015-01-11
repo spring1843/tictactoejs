@@ -41,18 +41,36 @@ describe("TicTacToe", function() {
     it("Game is over with Horizontal win", function() {
       ticTacToe.play(1, [1,1]);
       ticTacToe.play(2, [2,1]);
-      ticTacToe.play(1, [1,3]);
-      ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [1,2]);
+      ticTacToe.play(2, [2,2]);
+      ticTacToe.play(1, [1,3]);
+      expect(ticTacToe.getIsGameOver()).toBeTruthy();
+    });
+
+    it("Game is over with a Vertical win", function() {
+      ticTacToe.play(1, [1,1]);
+      ticTacToe.play(2, [2,2]);
+      ticTacToe.play(1, [2,1]);
+      ticTacToe.play(2, [3,3]);
+      ticTacToe.play(1, [3,1]);
+      expect(ticTacToe.getIsGameOver()).toBeTruthy();
+    });
+
+    it("Game is over with a Diognal win", function() {
+      ticTacToe.play(1, [1,1]);
+      ticTacToe.play(2, [2,1]);
+      ticTacToe.play(1, [2,2]);
+      ticTacToe.play(2, [3,1]);
+      ticTacToe.play(1, [3,3]);
       expect(ticTacToe.getIsGameOver()).toBeTruthy();
     });
 
     it("Game can not be played anymore", function() {
       ticTacToe.play(1, [1,1]);
       ticTacToe.play(2, [2,1]);
-      ticTacToe.play(1, [1,3]);
-      ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [1,2]);
+      ticTacToe.play(2, [2,2]);
+      ticTacToe.play(1, [1,3]);
       expect( function(){ 
         ticTacToe.play(1, [1,1]);
       }).toThrow(

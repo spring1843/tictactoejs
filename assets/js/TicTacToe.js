@@ -47,12 +47,21 @@ var TicTacToe = function () {
 
     var discoverAWin = function(){
        discoverHorizontalWin();
+       discoverVerticalWin();
     }
 
     var discoverHorizontalWin = function(){
         for(var row = 0; row < 3; row++){
             if(board[row][0] != null && board[row][0] == board[row][1] && board[row][0]  == board[row][2]){
-                finilizeWin('horizontal', row + 1, getPlayerFromShape(board[0][0]));
+                finilizeWin('horizontal', row + 1, getPlayerFromShape(board[row][0]));
+            }
+        }
+    }
+
+    var discoverVerticalWin = function(){
+        for(var col = 0; col < 3; col++){
+            if(board[0][col] != null && board[0][col] == board[1][col] && board[0][col]  == board[2][col]){
+                finilizeWin('vertical', col + 1, getPlayerFromShape(board[0][col]));
             }
         }
     }
