@@ -329,7 +329,37 @@ describe("TicTacToe", function () {
             });
         });
 
-        describe("and blocking opponent forking is possible, then block fork", function () {
+        describe("and forking is possible, then fork", function () {
+            beforeEach(function () {
+                ticTacToe = new TicTacToe();
+            });
+
+            it("Left fork opportunity is exploited", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 2]);
+                ticTacToe.play(1, [1, 1]);
+                ticTacToe.play(2, [3, 3]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[2][0] == shape || board[1][0] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Right fork opportunity is exploited", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 2]);
+                ticTacToe.play(1, [3, 1]);
+                ticTacToe.play(2, [1, 3]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[0][0] == shape || board[1][0] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+        });
+
+        describe("and blocking opponent forking is possible, then block", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
@@ -357,32 +387,18 @@ describe("TicTacToe", function () {
             });
         });
 
-        describe("and forking is possible, then fork", function () {
+        describe("and center is not occupied", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
 
-            it("Left fork opportunity is exploited", function () {
-                ticTacToe.play(1, [2, 2]);
-                ticTacToe.play(2, [1, 2]);
-                ticTacToe.play(1, [1, 1]);
-                ticTacToe.play(2, [3, 3]);
+            it("play center", function () {
+                ticTacToe.play(1, [1, 2]);
+                ticTacToe.play(2, [3, 2]);
                 ticTacToe.autoPlay(1);
                 var board = ticTacToe.getBoard();
                 var shape = 'x';
-                var isOpponentBlocked = board[2][0] == shape || board[1][0] == shape;
-                expect(isOpponentBlocked).toBeTruthy();
-            });
-
-            it("Right fork opportunity is exploited", function () {
-                ticTacToe.play(1, [2, 2]);
-                ticTacToe.play(2, [1, 2]);
-                ticTacToe.play(1, [3, 1]);
-                ticTacToe.play(2, [1, 3]);
-                ticTacToe.autoPlay(1);
-                var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[0][0] == shape || board[1][0] == shape;
+                var isOpponentBlocked = board[1][1]  == shape;
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });

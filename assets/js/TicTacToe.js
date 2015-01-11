@@ -205,7 +205,7 @@ var TicTacToe = function () {
             if (isAutoPlayInProgress == false)
                 return;
 
-            winningMoves = getWinningMoves(player);
+            var winningMoves = getWinningMoves(player);
             if (winningMoves.length > 0) {
                 play(player, winningMoves[0]);
                 isAutoPlayInProgress = false;
@@ -219,7 +219,7 @@ var TicTacToe = function () {
                 return;
 
             var opponentPlayer = getPlayerOponent(player);
-            opponentWinningMoves = getWinningMoves(opponentPlayer);
+            var opponentWinningMoves = getWinningMoves(opponentPlayer);
             if (opponentWinningMoves.length > 0) {
                 play(player, opponentWinningMoves[0]);
                 isAutoPlayInProgress = false;
@@ -231,11 +231,34 @@ var TicTacToe = function () {
             if (isAutoPlayInProgress == false)
                 return;
 
-            forkingMoves = getForkingMoves(player);
+            var forkingMoves = getForkingMoves(player);
             if (forkingMoves.length > 0) {
                 play(player, forkingMoves[0]);
                 isAutoPlayInProgress = false;
             }
+        }(player);
+
+        var autoPlayToBlockFork = function (player) {
+
+            if (isAutoPlayInProgress == false)
+                return;
+
+            var opponentPlayer = getPlayerOponent(player);
+            var opponentPlayerForkingMoves = getForkingMoves(opponentPlayer);
+            if (opponentPlayerForkingMoves.length > 0) {
+                play(player, opponentPlayerForkingMoves[0]);
+                isAutoPlayInProgress = false;
+            }
+        }(player);
+
+        var autoPlayCenter = function (player) {
+            if (isAutoPlayInProgress == false)
+                return;
+                if(board[1][1] === null) {
+                    play(player, [2, 2]);
+                    isAutoPlayInProgress = false;
+                }
+
         }(player);
 
         var autoPlayFillTheLastPossibleCell = function (player) {
