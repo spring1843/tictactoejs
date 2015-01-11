@@ -15,11 +15,12 @@ var TicTacToe = function () {
     var winnerLineType = null;
     var winnerLineNumber = null;
 
-    var play = function (player, move) {
+    var player = new Player();
+    var play = function (playerId, move) {
         if (isGameOver === true) {
             throw new exceptions.PlayingNotPossibleGameIsOver();
         }
-        var shape = getPlayerShape(player);
+        var shape = player.getPlayerShape(playerId);
         var cell = [move[0] - 1, move[1] - 1];
         changeCell(cell, shape);
         checkAfterChange();
@@ -30,24 +31,24 @@ var TicTacToe = function () {
         discoverADraw();
     }
 
-    var tryMoveForWin = function (player, move) {
+    var tryMoveForWin = function (playerId, move) {
         var tempGame = getTempGameWithSameBoard();
         //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
         var currentBoard = getBoardClone();
-        tempGame.play(player, move);
+        tempGame.play(playerId, move);
         var gameStatus = tempGame.getGameStatus();
         board = currentBoard;
-        if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winner === player)
+        if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winner === playerId)
             return true;
         return false;
     }
 
-    var tryMoveForMultipleWinOpportunity = function (player, move) {
+    var tryMoveForMultipleWinOpportunity = function (playerId, move) {
         var tempGame = getTempGameWithSameBoard();
         //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
         var currentBoard = getBoardClone();
-        tempGame.play(player, move);
-        var winningMovesAfterMove = tempGame.getWinningMoves(player);
+        tempGame.play(playerId, move);
+        var winningMovesAfterMove = tempGame.getWinningMoves(playerId);
         board = currentBoard;
         if (winningMovesAfterMove.length > 1)
             return true;
@@ -66,25 +67,25 @@ var TicTacToe = function () {
         return allPossibleMoves;
     }
 
-    var getWinningMoves = function (player) {
+    var getWinningMoves = function (playerId) {
         var winningMoves = [];
         var allPossibleMoves = getAllPossibleMoves();
         for (i in allPossibleMoves) {
             var possibleMove = allPossibleMoves[i];
-            if (tryMoveForWin(player, possibleMove) === true) {
+            if (tryMoveForWin(playerId, possibleMove) === true) {
                 winningMoves.push(possibleMove);
             }
         }
         return winningMoves;
     }
 
-    var getForkingMoves = function (player) {
+    var getForkingMoves = function (playerId) {
         var forkMoves = [];
         var allPossibleMoves = getAllPossibleMoves();
 
         for (i in allPossibleMoves) {
             var possibleMove = allPossibleMoves[i];
-            if (tryMoveForMultipleWinOpportunity(player, possibleMove) === true) {
+            if (tryMoveForMultipleWinOpportunity(playerId, possibleMove) === true) {
                 forkMoves.push(possibleMove);
             }
         }
@@ -98,29 +99,6 @@ var TicTacToe = function () {
         return tempGame;
     }
 
-    var getPlayerShape = function (player) {
-        if (player === 1) {
-            return 'x';
-        } else {
-            return 'o';
-        }
-    }
-
-    var getPlayerFromShape = function (player) {
-        if (player === 'x') {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
-
-    var getPlayerOponent = function (player) {
-        if (player === 1) {
-            return 2;
-        } else {
-            return 1;
-        }
-    }
 
     var changeCell = function (cell, shape) {
         var row = cell[0];
@@ -139,7 +117,7 @@ var TicTacToe = function () {
 
             for (var row = 0; row < 3; row++) {
                 if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
-                    finalizeDiscovery('win', 'horizontal', row + 1, getPlayerFromShape(board[row][0]));
+                    finalizeDiscovery('win', 'horizontal', row + 1, player.getPlayerFromShape(board[row][0]));
                 }
             }
         }();
@@ -150,7 +128,7 @@ var TicTacToe = function () {
 
             for (var col = 0; col < 3; col++) {
                 if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
-                    finalizeDiscovery('win', 'vertical', col + 1, getPlayerFromShape(board[0][col]));
+                    finalizeDiscovery('win', 'vertical', col + 1, player.getPlayerFromShape(board[0][col]));
                 }
             }
         }();
@@ -160,11 +138,11 @@ var TicTacToe = function () {
                 return
 
             if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-                finalizeDiscovery('win', 'diagonal', 1, getPlayerFromShape(board[1][1]));
+                finalizeDiscovery('win', 'diagonal', 1, player.getPlayerFromShape(board[1][1]));
             }
 
             if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-                finalizeDiscovery('win', 'diagonal', 2, getPlayerFromShape(board[1][1]));
+                finalizeDiscovery('win', 'diagonal', 2, player.getPlayerFromShape(board[1][1]));
             }
         }();
     }
@@ -174,11 +152,11 @@ var TicTacToe = function () {
             finalizeDiscovery('draw', null, null, null);
     }
 
-    var autoPlay = function (player) {
+    var autoPlay = function (playerId) {
 
         isAutoPlayInProgress = true;
 
-        var autoPlayFirstMove = function (player) {
+        var autoPlayFirstMove = function (playerId) {
 
             if (isAutoPlayInProgress == false)
                 return;
@@ -195,90 +173,90 @@ var TicTacToe = function () {
             ];
 
             var randomFirstMove = firstMoves[Math.floor(Math.random() * firstMoves.length)];
-            play(player, randomFirstMove);
+            play(playerId, randomFirstMove);
             isAutoPlayInProgress = false;
 
-        }(player);
+        }(playerId);
 
-        var autoPlayToWinWithOneMove = function (player) {
+        var autoPlayToWinWithOneMove = function (playerId) {
 
             if (isAutoPlayInProgress == false)
                 return;
 
-            var winningMoves = getWinningMoves(player);
+            var winningMoves = getWinningMoves(playerId);
             if (winningMoves.length > 0) {
-                play(player, winningMoves[0]);
+                play(playerId, winningMoves[0]);
                 isAutoPlayInProgress = false;
             }
 
-        }(player);
+        }(playerId);
 
-        var autoPlayToBlockWinningOpponent = function (player) {
+        var autoPlayToBlockWinningOpponent = function (playerId) {
 
             if (isAutoPlayInProgress == false)
                 return;
 
-            var opponentPlayer = getPlayerOponent(player);
+            var opponentPlayer = player.getPlayerOponent(playerId);
             var opponentWinningMoves = getWinningMoves(opponentPlayer);
             if (opponentWinningMoves.length > 0) {
-                play(player, opponentWinningMoves[0]);
+                play(playerId, opponentWinningMoves[0]);
                 isAutoPlayInProgress = false;
             }
-        }(player);
+        }(playerId);
 
-        var autoPlayToFork = function (player) {
+        var autoPlayToFork = function (playerId) {
 
             if (isAutoPlayInProgress == false)
                 return;
 
-            var forkingMoves = getForkingMoves(player);
+            var forkingMoves = getForkingMoves(playerId);
             if (forkingMoves.length > 0) {
-                play(player, forkingMoves[0]);
+                play(playerId, forkingMoves[0]);
                 isAutoPlayInProgress = false;
             }
-        }(player);
+        }(playerId);
 
-        var autoPlayToBlockFork = function (player) {
+        var autoPlayToBlockFork = function (playerId) {
 
             if (isAutoPlayInProgress == false)
                 return;
 
-            var opponentPlayer = getPlayerOponent(player);
+            var opponentPlayer = player.getPlayerOponent(playerId);
             var opponentPlayerForkingMoves = getForkingMoves(opponentPlayer);
             if (opponentPlayerForkingMoves.length > 0) {
-                play(player, opponentPlayerForkingMoves[0]);
+                play(playerId, opponentPlayerForkingMoves[0]);
                 isAutoPlayInProgress = false;
             }
-        }(player);
+        }(playerId);
 
-        var autoPlayCenter = function (player) {
+        var autoPlayCenter = function (playerId) {
             if (isAutoPlayInProgress == false)
                 return;
                 if(board[1][1] === null) {
-                    play(player, [2, 2]);
+                    play(playerId, [2, 2]);
                     isAutoPlayInProgress = false;
                 }
 
-        }(player);
+        }(playerId);
 
-        var autoPlayFillTheLastPossibleCell = function (player) {
+        var autoPlayFillTheLastPossibleCell = function (playerId) {
             if (isAutoPlayInProgress == false)
                 return;
 
             var allPossibleMoves = getAllPossibleMoves();
             if (allPossibleMoves.length === 1) {
-                play(player, allPossibleMoves[0]);
+                play(playerId, allPossibleMoves[0]);
                 isAutoPlayInProgress = false;
             }
-        }(player);
+        }(playerId);
     }
 
 
-    var finalizeDiscovery = function (discovery, lineType, lineNumber, player) {
+    var finalizeDiscovery = function (discovery, lineType, lineNumber, playerId) {
         gameResult = discovery;
         winnerLineType = lineType;
         winnerLineNumber = lineNumber;
-        winner = player;
+        winner = playerId;
         isGameOver = true;
     }
 
