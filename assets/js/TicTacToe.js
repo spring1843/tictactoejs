@@ -8,6 +8,7 @@ var TicTacToe = function () {
 
     var board = emptyBoard;
     var isGameOver = false;
+    var gameResult = null;
     var winner = null;
     var moves = 0;
     var winnerLineType = null;
@@ -57,7 +58,7 @@ var TicTacToe = function () {
 
         for (var row = 0; row < 3; row++) {
             if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
-                finalizeWin('horizontal', row + 1, getPlayerFromShape(board[row][0]));
+                finilizeDiscovery('win','horizontal', row + 1, getPlayerFromShape(board[row][0]));
             }
         }
     }
@@ -68,7 +69,7 @@ var TicTacToe = function () {
 
         for (var col = 0; col < 3; col++) {
             if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
-                finalizeWin('vertical', col + 1, getPlayerFromShape(board[0][col]));
+                finilizeDiscovery('win','vertical', col + 1, getPlayerFromShape(board[0][col]));
             }
         }
     }
@@ -78,15 +79,16 @@ var TicTacToe = function () {
             return
 
         if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-            finalizeWin('diagonal', 1, getPlayerFromShape(board[1][1]));
+            finilizeDiscovery('win','diagonal', 1, getPlayerFromShape(board[1][1]));
         }
 
         if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-            finalizeWin('diagonal', 2, getPlayerFromShape(board[1][1]));
+            finilizeDiscovery('win','diagonal', 2, getPlayerFromShape(board[1][1]));
         }
     }
 
-    var finalizeWin = function (lineType, lineNumber, player) {
+    var finilizeDiscovery = function (discovery, lineType, lineNumber, player) {
+        gameResult = discovery;
         winnerLineType = lineType;
         winnerLineNumber = lineNumber;
         winner = player;
@@ -96,6 +98,7 @@ var TicTacToe = function () {
     var getGameStatus = function () {
         return {
             isGameOver : isGameOver,
+            gameResult : gameResult,
             winner : winner,
             winnerLineType : winnerLineType,
             winnerLineNumber : winnerLineNumber
