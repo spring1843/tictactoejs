@@ -97,7 +97,7 @@ describe("TicTacToe", function () {
             ticTacToe.play(1, [1, 3]);
             ticTacToe.play(2, [2, 2]);
             ticTacToe.play(1, [2, 3]);
-            ticTacToe.play(2, [3, 3]);
+            ticTacToe.play(2, [1, 1]);
             ticTacToe.play(1, [3, 3]);
             expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
             expect(ticTacToe.getGameStatus().gameResult).toEqual('win');
@@ -256,6 +256,44 @@ describe("TicTacToe", function () {
             expect(ticTacToe.getGameStatus().winnerLineType).toEqual('diagonal');
             expect(ticTacToe.getGameStatus().winnerLineNumber).toEqual(2);
             expect(ticTacToe.getGameStatus().winner).toEqual(1);
+        });
+    });
+
+    describe("When a player is auto playing and there is only one possible move", function () {
+        beforeEach(function () {
+            ticTacToe = new TicTacToe();
+        });
+
+        it("The last possible move is played", function () {
+            ticTacToe.play(1, [1, 1]);
+            ticTacToe.play(2, [3, 1]);
+            ticTacToe.play(1, [1, 3]);
+            ticTacToe.play(2, [1, 2]);
+            ticTacToe.play(1, [2, 2]);
+            ticTacToe.play(2, [3, 3]);
+            ticTacToe.play(1, [3, 2]);
+            ticTacToe.play(2, [2, 3]);
+            ticTacToe.autoPlay(1);
+            expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+            expect(ticTacToe.getGameStatus().gameResult).toEqual('draw');
+            expect(ticTacToe.getGameStatus().winnerLineType).toEqual(null);
+            expect(ticTacToe.getGameStatus().winnerLineNumber).toEqual(null);
+            expect(ticTacToe.getGameStatus().winner).toEqual(null);
+        });
+    });
+
+
+    describe("When a player is auto playing and it's the first move", function () {
+        beforeEach(function () {
+            ticTacToe = new TicTacToe();
+        });
+
+        it("A corner or center is randomly played", function () {
+            ticTacToe.autoPlay(1);
+            var board = ticTacToe.getBoard();
+            var shape = 'x';
+            var isCornerOrCellOccupied = board[0][0] == shape || board[0][2] == shape || board[1][1] == shape || board[2][0] == shape || board[2][2] == shape;
+            expect(isCornerOrCellOccupied).toBeTruthy();
         });
     });
 

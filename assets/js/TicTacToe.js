@@ -29,29 +29,39 @@ var TicTacToe = function () {
     }
 
     var autoPlay = function (player) {
-        winWithOneMove(player);
+        autoPlayToWinWithOneMove(player);
+        autoPlayFillTheLastPossibleCell(player);
     }
 
-    var winWithOneMove = function (player) {
-        var shape = getPlayerShape(player);
+    var autoPlayFillTheLastPossibleCell = function(player){
+        var allPossibleMoves = getAllPossibleMoves();
+        if(allPossibleMoves.length === 1){
+            play(player, allPossibleMoves[0]);
+        }
+    }
+
+    var autoPlayToWinWithOneMove = function (player) {
         var allPossibleMoves = getAllPossibleMoves();
         for (i in allPossibleMoves) {
             var possibleMove = allPossibleMoves[i];
-
-            var tempGame = getTempGameWithSameBoard();
-            //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
-            var currentBoard = getBoardClone();
-            tempGame.play(player, possibleMove);
-            var tempGameStatus = tempGame.getGameStatus();
-            board = currentBoard;
-            if (tempGameStatus.isGameOver === true && tempGameStatus.gameResult === 'win' && tempGameStatus.winner === player) {
+            if (tryMoveForWin(player, possibleMove) === true) {
                 play(player, possibleMove);
                 break;
             }
         }
-        return null;
     }
 
+    var tryMoveForWin = function(player, move){
+        var tempGame = getTempGameWithSameBoard();
+        //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
+        var currentBoard = getBoardClone();
+        tempGame.play(player, move);
+        var tempGameStatus = tempGame.getGameStatus();
+        board = currentBoard;
+        if (tempGameStatus.isGameOver === true && tempGameStatus.gameResult === 'win' && tempGameStatus.winner === player)
+            return true;
+        return false;
+    }
 
     var getAllPossibleMoves = function () {
         var allPossibleMoves = [];
@@ -90,6 +100,8 @@ var TicTacToe = function () {
     var changeCell = function (cell, shape) {
         var row = cell[0] - 1;
         var col = cell[1] - 1;
+        if(board[row][col] !== null)
+            throw new exceptions.PlayingNotPossibleCellOccupied();
         board[row][col] = shape;
         moves++;
     }
@@ -178,7 +190,11 @@ var TicTacToe = function () {
     var exceptions = {
         PlayingNotPossibleGameIsOver: function () {
             throw new Error("Playing is not possible, game is over");
+        },
+        PlayingNotPossibleCellOccupied: function () {
+            throw new Error("Playing is not possible, this cell is occupied");
         }
+
     }
 
     return {
