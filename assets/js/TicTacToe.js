@@ -8,17 +8,19 @@ var TicTacToe = function () {
 
     var board = emptyBoard;
     var isGameOver = false;
+    var isAutoPlayInProgress = false;
     var gameResult = null;
     var winner = null;
     var moves = 0;
     var winnerLineType = null;
     var winnerLineNumber = null;
 
-    var play = function (player, cell) {
+    var play = function (player, move) {
         if (isGameOver === true) {
             throw new exceptions.PlayingNotPossibleGameIsOver();
         }
         var shape = getPlayerShape(player);
+        var cell = [move[0]-1, move[1]-1];
         changeCell(cell, shape);
         checkAfterChange();
     }
@@ -61,7 +63,7 @@ var TicTacToe = function () {
     }
 
     var getPlayerShape = function (player) {
-        if (player == 1) {
+        if (player === 1) {
             return 'x';
         } else {
             return 'o';
@@ -69,16 +71,24 @@ var TicTacToe = function () {
     }
 
     var getPlayerFromShape = function (player) {
-        if (player == 'x') {
+        if (player === 'x') {
             return 1;
         } else {
             return 2;
         }
     }
 
+    var getPlayerOponent = function(player){
+        if (player === 1) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
     var changeCell = function (cell, shape) {
-        var row = cell[0] - 1;
-        var col = cell[1] - 1;
+        var row = cell[0];
+        var col = cell[1];
         if(board[row][col] !== null)
             throw new exceptions.PlayingNotPossibleCellOccupied();
         board[row][col] = shape;
@@ -130,9 +140,15 @@ var TicTacToe = function () {
 
     var autoPlay = function (player) {
 
+        isAutoPlayInProgress = true;
+
         var autoPlayFirstMove = function(player){
+
+            if(isAutoPlayInProgress == false)
+                return;
+
             if(moves > 0)
-                return false;
+                return;
 
             var firstMoves = [
                 [1,1],
@@ -144,31 +160,51 @@ var TicTacToe = function () {
 
             var randomFirstMove =  firstMoves[Math.floor(Math.random()*firstMoves.length)];
             play(player, randomFirstMove);
+            isAutoPlayInProgress = false;
+
         }(player);
 
         var autoPlayToWinWithOneMove = function (player) {
+
+            if(isAutoPlayInProgress == false)
+                return;
+
             var allPossibleMoves = getAllPossibleMoves();
             for (i in allPossibleMoves) {
                 var possibleMove = allPossibleMoves[i];
                 if (tryMoveForWin(player, possibleMove) === true) {
                     play(player, possibleMove);
-                    return true;
+                    isAutoPlayInProgress = false;
+                    break;
                 }
             }
-            return false;
         }(player);
 
         var autoPlayToBlockWinningOpponent = function (player) {
-           
+
+            if(isAutoPlayInProgress == false)
+                return;
+            var allPossibleMoves = getAllPossibleMoves();
+            var opponentPlayer = getPlayerOponent(player);
+            for (i in allPossibleMoves) {
+                var possibleMove = allPossibleMoves[i];
+                if (tryMoveForWin(opponentPlayer, possibleMove) === true) {
+                    play(player, possibleMove);
+                    isAutoPlayInProgress = false;
+                    break;
+                }
+            }
         }(player);
 
         var autoPlayFillTheLastPossibleCell= function(player){
+            if(isAutoPlayInProgress == false)
+                return;
+
             var allPossibleMoves = getAllPossibleMoves();
             if(allPossibleMoves.length === 1){
                 play(player, allPossibleMoves[0]);
-                return true;
+                isAutoPlayInProgress = false;
             }
-            return false;
         }(player);
     }
 

@@ -14,7 +14,7 @@ describe("TicTacToe", function () {
         expect(ticTacToe.isGameOver).toBeFalsy();
     });
 
-    describe("When first move has been made", function () {
+    describe("When first move is made", function () {
         beforeEach(function () {
             ticTacToe.play(1, [1, 1]);
         });
@@ -38,7 +38,7 @@ describe("TicTacToe", function () {
         });
     });
 
-    describe("When a player wins", function () {
+    describe("When a winning move is made", function () {
         beforeEach(function () {
             ticTacToe = new TicTacToe();
         });
@@ -201,8 +201,20 @@ describe("TicTacToe", function () {
 
     describe("When Auto Playing", function () {
 
+        describe("and it's the turn in the game", function () {
+            it("A corner or center is randomly played", function () {
+                for(var i = 0; i<10;i++) {
+                    ticTacToe = new TicTacToe();
+                    ticTacToe.autoPlay(1);
+                    var board = ticTacToe.getBoard();
+                    var shape = 'x';
+                    var isCornerOrCellOccupied = board[0][0] == shape || board[0][2] == shape || board[1][1] == shape || board[2][0] == shape || board[2][2] == shape;
+                    expect(isCornerOrCellOccupied).toBeTruthy();
+                }
+            });
+        });
 
-        describe("and game can be one with one move", function () {
+        describe("and game can be won with one move", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
@@ -264,7 +276,71 @@ describe("TicTacToe", function () {
             });
         });
 
-        describe("and there is only one possible move", function () {
+
+        describe("and blocking a win by opponent is possible", function () {
+            beforeEach(function () {
+                ticTacToe = new TicTacToe();
+            });
+
+            it("The opponent is blocked a vertical 2 win", function () {
+                ticTacToe.play(1, [1, 1]);
+                ticTacToe.play(2, [2, 2]);
+                ticTacToe.play(1, [3, 1]);
+                ticTacToe.play(2, [2, 1]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[1][2] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("The opponent is blocked a horizontal 2 win", function () {
+                ticTacToe.play(1, [1, 1]);
+                ticTacToe.play(2, [2, 1]);
+                ticTacToe.play(1, [3, 1]);
+                ticTacToe.play(2, [2, 3]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[1][1] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("The opponent is blocked a diagonal 2 win", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 2]);
+                ticTacToe.play(1, [3, 1]);
+                ticTacToe.autoPlay(2);
+                var board = ticTacToe.getBoard();
+                var shape = 'o';
+                var isOpponentBlocked = board[0][2] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("The opponent is blocked after a mishandled right fork", function () {
+                ticTacToe.play(1, [1, 1]);
+                ticTacToe.play(2, [1, 3]);
+                ticTacToe.play(1, [2, 1]);
+                ticTacToe.play(2, [3, 1]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[1][1] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+        });
+
+        describe("and blocking opponent fork is possible", function () {
+            beforeEach(function () {
+                ticTacToe = new TicTacToe();
+            });
+
+            it("Opponent left fork is blocked", function () {
+
+            });
+        });
+
+        describe("and it's the last turn in the game", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
@@ -287,37 +363,6 @@ describe("TicTacToe", function () {
             });
         });
 
-
-        describe("and it's the first move", function () {
-            it("A corner or center is randomly played", function () {
-                for(var i = 0; i<10;i++) {
-                    ticTacToe = new TicTacToe();
-                    ticTacToe.autoPlay(1);
-                    var board = ticTacToe.getBoard();
-                    var shape = 'x';
-                    var isCornerOrCellOccupied = board[0][0] == shape || board[0][2] == shape || board[1][1] == shape || board[2][0] == shape || board[2][2] == shape;
-                    expect(isCornerOrCellOccupied).toBeTruthy();
-                }
-            });
-        });
-
-        describe("and blocking a win by opponent is possible", function () {
-            beforeEach(function () {
-                ticTacToe = new TicTacToe();
-            });
-
-            it("The opponent is blocked", function () {
-                ticTacToe.play(1, [1, 1]);
-                ticTacToe.play(2, [2, 2]);
-                ticTacToe.play(1, [3, 1]);
-                ticTacToe.play(2, [2, 1]);
-                ticTacToe.autoPlay(1);
-                var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[1][2] == shape;
-                expect(isOpponentBlocked).toBeTruthy();
-            });
-        });
     });
 
 
