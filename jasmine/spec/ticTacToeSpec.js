@@ -335,8 +335,16 @@ describe("TicTacToe", function () {
                 ticTacToe = new TicTacToe();
             });
 
-            it("Left fork oppurtunity is exploited", function () {
-
+            it("Left fork opportunity is exploited fork is blocked", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 2]);
+                ticTacToe.play(1, [1, 1]);
+                ticTacToe.play(2, [3, 3]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[2][0] == shape || board[1][0] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
             });
         });
 

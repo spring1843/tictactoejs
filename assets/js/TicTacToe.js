@@ -35,12 +35,24 @@ var TicTacToe = function () {
         //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
         var currentBoard = getBoardClone();
         tempGame.play(player, move);
-        var tempGameStatus = tempGame.getGameStatus();
+        var gameStatus = tempGame.getGameStatus();
         board = currentBoard;
-        if (tempGameStatus.isGameOver === true && tempGameStatus.gameResult === 'win' && tempGameStatus.winner === player)
+        if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winner === player)
             return true;
         return false;
     }
+
+    var tryMoveForMultipleWinOpportunity = function (player, move) {
+        var tempGame = getTempGameWithSameBoard();
+        //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
+        var currentBoard = getBoardClone();
+        tempGame.play(player, move);
+        var winningMovesAfterMove = tempGame.getWinningMoves(player);
+        board = currentBoard;
+        if (winningMovesAfterMove.length > 1)
+            return true;
+        return false;
+    };
 
     var getAllPossibleMoves = function () {
         var allPossibleMoves = [];
@@ -65,6 +77,21 @@ var TicTacToe = function () {
             }
             return winningMoves;
     }
+
+    var getForkingMoves = function(player){
+            var forkMoves = [];
+            var allPossibleMoves = getAllPossibleMoves();
+
+        for (i in allPossibleMoves) {
+                var possibleMove = allPossibleMoves[i];
+                if (tryMoveForMultipleWinOpportunity(player, possibleMove) === true) {
+                    forkMoves.push(possibleMove);                    
+                }
+            }
+            return forkMoves;
+    }
+
+
 
     function getTempGameWithSameBoard() {
         var tempGame = new TicTacToe();
@@ -200,6 +227,19 @@ var TicTacToe = function () {
              }
         }(player);
 
+
+        var autoPlayToFork = function (player) {
+
+            if(isAutoPlayInProgress == false)
+                return;
+
+             forkingMoves = getForkingMoves(player);
+             if(forkingMoves.length > 0){
+                play(player, forkingMoves[0]);
+                isAutoPlayInProgress = false;
+             }
+        }(player);
+
         var autoPlayFillTheLastPossibleCell= function(player){
             if(isAutoPlayInProgress == false)
                 return;
@@ -255,7 +295,6 @@ var TicTacToe = function () {
         PlayingNotPossibleCellOccupied: function () {
             throw new Error("Playing is not possible, this cell is occupied");
         }
-
     }
 
     return {
@@ -264,6 +303,7 @@ var TicTacToe = function () {
         getBoard: getBoard,
         setBoard: setBoard,
         getGameStatus: getGameStatus,
+        getWinningMoves : getWinningMoves,
         exceptions: exceptions
     }
 };
