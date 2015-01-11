@@ -21,6 +21,7 @@ var TicTacToe = function () {
         shape = getPlayerShape(player);
         changeCell(cell, shape);
         discoverAWin();
+        discoverADraw();
     }
 
     var getPlayerShape = function (player) {
@@ -58,7 +59,7 @@ var TicTacToe = function () {
 
         for (var row = 0; row < 3; row++) {
             if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
-                finilizeDiscovery('win','horizontal', row + 1, getPlayerFromShape(board[row][0]));
+                finalizeDiscovery('win','horizontal', row + 1, getPlayerFromShape(board[row][0]));
             }
         }
     }
@@ -69,7 +70,7 @@ var TicTacToe = function () {
 
         for (var col = 0; col < 3; col++) {
             if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
-                finilizeDiscovery('win','vertical', col + 1, getPlayerFromShape(board[0][col]));
+                finalizeDiscovery('win','vertical', col + 1, getPlayerFromShape(board[0][col]));
             }
         }
     }
@@ -79,15 +80,20 @@ var TicTacToe = function () {
             return
 
         if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-            finilizeDiscovery('win','diagonal', 1, getPlayerFromShape(board[1][1]));
+            finalizeDiscovery('win','diagonal', 1, getPlayerFromShape(board[1][1]));
         }
 
         if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-            finilizeDiscovery('win','diagonal', 2, getPlayerFromShape(board[1][1]));
+            finalizeDiscovery('win','diagonal', 2, getPlayerFromShape(board[1][1]));
         }
     }
 
-    var finilizeDiscovery = function (discovery, lineType, lineNumber, player) {
+    var discoverADraw = function () {
+        if(moves == 9 && isGameOver == false && winner == null)
+            finalizeDiscovery('draw', null, null, null);
+    }
+
+    var finalizeDiscovery = function (discovery, lineType, lineNumber, player) {
         gameResult = discovery;
         winnerLineType = lineType;
         winnerLineNumber = lineNumber;
