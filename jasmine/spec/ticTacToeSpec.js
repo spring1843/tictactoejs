@@ -330,12 +330,12 @@ describe("TicTacToe", function () {
             });
         });
 
-        describe("and forking is possible, then try to fork", function () {
+        describe("and forking is possible, then fork", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
             });
 
-            it("Left fork opportunity is exploited fork is blocked", function () {
+            it("Left fork opportunity is exploited", function () {
                 ticTacToe.play(1, [2, 2]);
                 ticTacToe.play(2, [1, 2]);
                 ticTacToe.play(1, [1, 1]);
@@ -344,6 +344,18 @@ describe("TicTacToe", function () {
                 var board = ticTacToe.getBoard();
                 var shape = 'x';
                 var isOpponentBlocked = board[2][0] == shape || board[1][0] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Right fork opportunity is exploited", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 2]);
+                ticTacToe.play(1, [3, 1]);
+                ticTacToe.play(2, [3, 1]);
+                ticTacToe.autoPlay(1);
+                var board = ticTacToe.getBoard();
+                var shape = 'x';
+                var isOpponentBlocked = board[1][2] == shape || board[2][2] == shape;
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
