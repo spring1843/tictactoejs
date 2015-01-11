@@ -28,28 +28,7 @@ var TicTacToe = function () {
         discoverADraw();
     }
 
-    var autoPlay = function (player) {
-        autoPlayToWinWithOneMove(player);
-        autoPlayFillTheLastPossibleCell(player);
-    }
 
-    var autoPlayFillTheLastPossibleCell = function(player){
-        var allPossibleMoves = getAllPossibleMoves();
-        if(allPossibleMoves.length === 1){
-            play(player, allPossibleMoves[0]);
-        }
-    }
-
-    var autoPlayToWinWithOneMove = function (player) {
-        var allPossibleMoves = getAllPossibleMoves();
-        for (i in allPossibleMoves) {
-            var possibleMove = allPossibleMoves[i];
-            if (tryMoveForWin(player, possibleMove) === true) {
-                play(player, possibleMove);
-                break;
-            }
-        }
-    }
 
     var tryMoveForWin = function(player, move){
         var tempGame = getTempGameWithSameBoard();
@@ -77,7 +56,7 @@ var TicTacToe = function () {
 
     function getTempGameWithSameBoard() {
         var tempGame = new TicTacToe();
-        tempGame.setBoard(getBoard());
+        tempGame.setBoard(board);
         return tempGame;
     }
 
@@ -107,50 +86,92 @@ var TicTacToe = function () {
     }
 
     var discoverAWin = function () {
-        discoverHorizontalWin();
-        discoverVerticalWin();
-        discoverDiagonalWin();
-    }
 
-    var discoverHorizontalWin = function () {
-        if (isGameOver === true)
-            return
+        var discoverHorizontalWin = function(){
+            if (isGameOver === true)
+                return
 
-        for (var row = 0; row < 3; row++) {
-            if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
-                finalizeDiscovery('win', 'horizontal', row + 1, getPlayerFromShape(board[row][0]));
+            for (var row = 0; row < 3; row++) {
+                if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
+                    finalizeDiscovery('win', 'horizontal', row + 1, getPlayerFromShape(board[row][0]));
+                }
             }
-        }
-    }
+        }();
 
-    var discoverVerticalWin = function () {
-        if (isGameOver === true)
-            return
+        var discoverVerticalWin = function () {
+            if (isGameOver === true)
+                return
 
-        for (var col = 0; col < 3; col++) {
-            if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
-                finalizeDiscovery('win', 'vertical', col + 1, getPlayerFromShape(board[0][col]));
+            for (var col = 0; col < 3; col++) {
+                if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
+                    finalizeDiscovery('win', 'vertical', col + 1, getPlayerFromShape(board[0][col]));
+                }
             }
-        }
-    }
+        }();
 
-    var discoverDiagonalWin = function () {
-        if (isGameOver === true)
-            return
+        var discoverDiagonalWin = function () {
+            if (isGameOver === true)
+                return
 
-        if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-            finalizeDiscovery('win', 'diagonal', 1, getPlayerFromShape(board[1][1]));
-        }
+            if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
+                finalizeDiscovery('win', 'diagonal', 1, getPlayerFromShape(board[1][1]));
+            }
 
-        if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-            finalizeDiscovery('win', 'diagonal', 2, getPlayerFromShape(board[1][1]));
-        }
+            if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
+                finalizeDiscovery('win', 'diagonal', 2, getPlayerFromShape(board[1][1]));
+            }
+        }();
     }
 
     var discoverADraw = function () {
         if (moves == 9 && isGameOver == false && winner == null)
             finalizeDiscovery('draw', null, null, null);
     }
+
+    var autoPlay = function (player) {
+
+        var autoPlayFirstMove = function(player){
+            if(moves > 0)
+                return false;
+
+            var firstMoves = [
+                [1,1],
+                [1,3],
+                [2,2],
+                [3,1],
+                [3,3]
+            ];
+
+            var randomFirstMove =  firstMoves[Math.floor(Math.random()*firstMoves.length)];
+            play(player, randomFirstMove);
+        }(player);
+
+        var autoPlayToWinWithOneMove = function (player) {
+            var allPossibleMoves = getAllPossibleMoves();
+            for (i in allPossibleMoves) {
+                var possibleMove = allPossibleMoves[i];
+                if (tryMoveForWin(player, possibleMove) === true) {
+                    play(player, possibleMove);
+                    return true;
+                }
+            }
+            return false;
+        }(player);
+
+        var autoPlayToBlockWinningOpponent = function (player) {
+           
+        }(player);
+
+        var autoPlayFillTheLastPossibleCell= function(player){
+            var allPossibleMoves = getAllPossibleMoves();
+            if(allPossibleMoves.length === 1){
+                play(player, allPossibleMoves[0]);
+                return true;
+            }
+            return false;
+        }(player);
+    }
+
 
     var finalizeDiscovery = function (discovery, lineType, lineNumber, player) {
         gameResult = discovery;
