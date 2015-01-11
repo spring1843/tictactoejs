@@ -16,12 +16,59 @@ var TicTacToe = function () {
 
     var play = function (player, cell) {
         if (isGameOver === true) {
-            throw new exceptions.PlayingNotPossible();
+            throw new exceptions.PlayingNotPossibleGameIsOver();
         }
-        shape = getPlayerShape(player);
+        var shape = getPlayerShape(player);
         changeCell(cell, shape);
+        checkAfterChange();
+    }
+
+    var checkAfterChange = function () {
         discoverAWin();
         discoverADraw();
+    }
+
+    var autoPlay = function (player) {
+        winWithOneMove(player);
+    }
+
+    var winWithOneMove = function (player) {
+        var shape = getPlayerShape(player);
+        var allPossibleMoves = getAllPossibleMoves();
+        for (i in allPossibleMoves) {
+            var possibleMove = allPossibleMoves[i];
+
+            var tempGame = getTempGameWithSameBoard();
+            //TODO board in this scope changes after calling the tempGame, the current board is stored in defense, find out why and fix
+            var currentBoard = getBoardClone();
+            tempGame.play(player, possibleMove);
+            var tempGameStatus = tempGame.getGameStatus();
+            board = currentBoard;
+            if (tempGameStatus.isGameOver === true && tempGameStatus.gameResult === 'win' && tempGameStatus.winner === player) {
+                play(player, possibleMove);
+                break;
+            }
+        }
+        return null;
+    }
+
+
+    var getAllPossibleMoves = function () {
+        var allPossibleMoves = [];
+        for (var row = 0; row < 3; row++) {
+            for (var col = 0; col < 3; col++) {
+                if (board[row][col] === null) {
+                    allPossibleMoves.push([row + 1, col + 1]);
+                }
+            }
+        }
+        return allPossibleMoves;
+    }
+
+    function getTempGameWithSameBoard() {
+        var tempGame = new TicTacToe();
+        tempGame.setBoard(getBoard());
+        return tempGame;
     }
 
     var getPlayerShape = function (player) {
@@ -59,7 +106,7 @@ var TicTacToe = function () {
 
         for (var row = 0; row < 3; row++) {
             if (board[row][0] != null && board[row][0] == board[row][1] && board[row][0] == board[row][2]) {
-                finalizeDiscovery('win','horizontal', row + 1, getPlayerFromShape(board[row][0]));
+                finalizeDiscovery('win', 'horizontal', row + 1, getPlayerFromShape(board[row][0]));
             }
         }
     }
@@ -70,7 +117,7 @@ var TicTacToe = function () {
 
         for (var col = 0; col < 3; col++) {
             if (board[0][col] != null && board[0][col] == board[1][col] && board[0][col] == board[2][col]) {
-                finalizeDiscovery('win','vertical', col + 1, getPlayerFromShape(board[0][col]));
+                finalizeDiscovery('win', 'vertical', col + 1, getPlayerFromShape(board[0][col]));
             }
         }
     }
@@ -80,16 +127,16 @@ var TicTacToe = function () {
             return
 
         if (board[0][0] != null && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
-            finalizeDiscovery('win','diagonal', 1, getPlayerFromShape(board[1][1]));
+            finalizeDiscovery('win', 'diagonal', 1, getPlayerFromShape(board[1][1]));
         }
 
         if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
-            finalizeDiscovery('win','diagonal', 2, getPlayerFromShape(board[1][1]));
+            finalizeDiscovery('win', 'diagonal', 2, getPlayerFromShape(board[1][1]));
         }
     }
 
     var discoverADraw = function () {
-        if(moves == 9 && isGameOver == false && winner == null)
+        if (moves == 9 && isGameOver == false && winner == null)
             finalizeDiscovery('draw', null, null, null);
     }
 
@@ -103,23 +150,42 @@ var TicTacToe = function () {
 
     var getGameStatus = function () {
         return {
-            isGameOver : isGameOver,
-            gameResult : gameResult,
-            winner : winner,
-            winnerLineType : winnerLineType,
-            winnerLineNumber : winnerLineNumber
+            isGameOver: isGameOver,
+            gameResult: gameResult,
+            winner: winner,
+            winnerLineType: winnerLineType,
+            winnerLineNumber: winnerLineNumber
         };
     }
 
+    var getBoard = function () {
+        return board;
+    }
+
+    var getBoardClone = function () {
+        return [
+            [board[0][0], board[0][1], board[0][2]],
+            [board[1][0], board[1][1], board[1][2]],
+            [board[2][0], board[2][1], board[2][2]]
+        ];
+    }
+
+    var setBoard = function (newBoard) {
+        board = newBoard;
+        checkAfterChange();
+    }
+
     var exceptions = {
-        PlayingNotPossible: function () {
+        PlayingNotPossibleGameIsOver: function () {
             throw new Error("Playing is not possible, game is over");
         }
     }
 
     return {
         play: play,
-        board: board,
+        autoPlay: autoPlay,
+        getBoard: getBoard,
+        setBoard: setBoard,
         getGameStatus: getGameStatus,
         exceptions: exceptions
     }
