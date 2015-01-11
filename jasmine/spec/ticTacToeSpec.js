@@ -25,11 +25,11 @@ describe("TicTacToe", function() {
     });
 
     it("Game should not be over after the first game", function() {
-      expect(ticTacToe.isGameOver).toBeFalsy();
+      expect(ticTacToe.getGameStatus().isGameOver).toBeFalsy();
     });
 
     it("Game should not have a winner after the first game", function() {
-      expect(ticTacToe.getWinner()).toEqual(null);
+      expect(ticTacToe.getGameStatus().winner).toEqual(null);
     });
   });
 
@@ -38,31 +38,76 @@ describe("TicTacToe", function() {
       ticTacToe = new TicTacToe();
     });
 
-    it("Game is over with Horizontal win", function() {
+    it("Game is over with Horizontal l win", function() {
       ticTacToe.play(1, [1,1]);
       ticTacToe.play(2, [2,1]);
       ticTacToe.play(1, [1,2]);
       ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [1,3]);
-      expect(ticTacToe.getIsGameOver()).toBeTruthy();
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
     });
 
-    it("Game is over with a Vertical win", function() {
+    it("Game is over with Horizontal 2 win", function() {
+      ticTacToe.play(1, [2,1]);
+      ticTacToe.play(2, [3,1]);
+      ticTacToe.play(1, [2,2]);
+      ticTacToe.play(2, [3,2]);
+      ticTacToe.play(1, [2,3]);
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+    });
+
+    it("Game is over with Horizontal 3 win", function() {
+      ticTacToe.play(1, [3,1]);
+      ticTacToe.play(2, [2,1]);
+      ticTacToe.play(1, [3,2]);
+      ticTacToe.play(2, [2,2]);
+      ticTacToe.play(1, [3,3]);
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+    });
+
+    it("Game is over with a Vertical 1 win", function() {
       ticTacToe.play(1, [1,1]);
       ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [2,1]);
       ticTacToe.play(2, [3,3]);
       ticTacToe.play(1, [3,1]);
-      expect(ticTacToe.getIsGameOver()).toBeTruthy();
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
     });
 
-    it("Game is over with a Diognal win", function() {
+    it("Game is over with a Vertical 2 win", function() {
+      ticTacToe.play(1, [1,2]);
+      ticTacToe.play(2, [2,3]);
+      ticTacToe.play(1, [2,2]);
+      ticTacToe.play(2, [3,3]);
+      ticTacToe.play(1, [3,2]);
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+    });
+
+    it("Game is over with a Vertical 3 win", function() {
+      ticTacToe.play(1, [1,3]);
+      ticTacToe.play(2, [2,2]);
+      ticTacToe.play(1, [2,3]);
+      ticTacToe.play(2, [3,3]);
+      ticTacToe.play(1, [3,3]);
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+    });
+
+    it("Game is over with a Diagonal 1 win", function() {
       ticTacToe.play(1, [1,1]);
       ticTacToe.play(2, [2,1]);
       ticTacToe.play(1, [2,2]);
       ticTacToe.play(2, [3,1]);
       ticTacToe.play(1, [3,3]);
-      expect(ticTacToe.getIsGameOver()).toBeTruthy();
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
+    });
+
+    it("Game is over with a Diagonal 2 win", function() {
+      ticTacToe.play(1, [1,3]);
+      ticTacToe.play(2, [2,1]);
+      ticTacToe.play(1, [2,2]);
+      ticTacToe.play(2, [3,2]);
+      ticTacToe.play(1, [3,1]);
+      expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
     });
 
     it("Game can not be played anymore", function() {
@@ -71,10 +116,10 @@ describe("TicTacToe", function() {
       ticTacToe.play(1, [1,2]);
       ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [1,3]);
-      expect( function(){ 
+      expect( function(){
         ticTacToe.play(1, [1,1]);
       }).toThrow(
-        new Error("Playing is not possible, game is over")
+          new Error("Playing is not possible, game is over")
       );
     });
 
@@ -84,7 +129,7 @@ describe("TicTacToe", function() {
       ticTacToe.play(1, [1,3]);
       ticTacToe.play(2, [2,2]);
       ticTacToe.play(1, [1,2]);
-      expect(ticTacToe.getWinner()).not.toEqual(null);
+      expect(ticTacToe.getGameStatus().winner).not.toEqual(null);
     });
   });
 
