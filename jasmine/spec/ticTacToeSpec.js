@@ -198,12 +198,11 @@ describe("TicTacToe", function () {
     });
 
 
-
     describe("When Auto Playing", function () {
 
         describe("and it's the turn in the game", function () {
             it("A corner or center is randomly played", function () {
-                for(var i = 0; i<10;i++) {
+                for (var i = 0; i < 10; i++) {
                     ticTacToe = new TicTacToe();
                     ticTacToe.autoPlay(1);
                     var board = ticTacToe.getBoard();
@@ -330,6 +329,34 @@ describe("TicTacToe", function () {
             });
         });
 
+        describe("and blocking opponent forking is possible, then block fork", function () {
+            beforeEach(function () {
+                ticTacToe = new TicTacToe();
+            });
+
+            it("Left fork opportunity for opponent is blocked", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [3, 1]);
+                ticTacToe.play(1, [1, 3]);
+                ticTacToe.autoPlay(2);
+                var board = ticTacToe.getBoard();
+                var shape = 'o';
+                var isOpponentBlocked = board[0][0] == shape || board[2][2] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Right fork opportunity for opponent is blocked", function () {
+                ticTacToe.play(1, [2, 2]);
+                ticTacToe.play(2, [1, 1]);
+                ticTacToe.play(1, [3, 3]);
+                ticTacToe.autoPlay(2);
+                var board = ticTacToe.getBoard();
+                var shape = 'o';
+                var isOpponentBlocked = board[0][2] == shape || board[2][0] == shape;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+        });
+
         describe("and forking is possible, then fork", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
@@ -351,11 +378,11 @@ describe("TicTacToe", function () {
                 ticTacToe.play(1, [2, 2]);
                 ticTacToe.play(2, [1, 2]);
                 ticTacToe.play(1, [3, 1]);
-                ticTacToe.play(2, [3, 1]);
+                ticTacToe.play(2, [1, 3]);
                 ticTacToe.autoPlay(1);
                 var board = ticTacToe.getBoard();
                 var shape = 'x';
-                var isOpponentBlocked = board[1][2] == shape || board[2][2] == shape;
+                var isOpponentBlocked = board[0][0] == shape || board[1][0] == shape;
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
@@ -384,8 +411,6 @@ describe("TicTacToe", function () {
         });
 
     });
-
-
 
 
 });
