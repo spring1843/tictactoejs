@@ -4,7 +4,7 @@ describe("Computer", function () {
     var player1;
     var player2;
 
-    describe("When Auto Playing", function () {
+    describe("When hinting a player", function () {
 
         describe("and it's the turn in the game", function () {
             it("A corner or center is randomly played", function () {

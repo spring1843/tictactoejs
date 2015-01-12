@@ -15,7 +15,6 @@ var TicTacToe = function () {
     var winnerLineNumber = null;
 
     var changeCell = function (row, column, shape) {
-
         if (isGameOver === true) {
             throw new exceptions.PlayingNotPossibleGameIsOver();
         }
@@ -34,7 +33,6 @@ var TicTacToe = function () {
 
 
     var discoverAWin = function () {
-
         var discoverHorizontalWin = function () {
             if (isGameOver === true)
                 return;

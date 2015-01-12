@@ -1,6 +1,5 @@
 describe("Player", function () {
 
-
     var ticTacToe;
     var player1;
     var player2;
@@ -21,6 +20,5 @@ describe("Player", function () {
         expect(player1.getOpponentId()).toEqual(2);
         expect(player2.getOpponentId()).toEqual(1);
     });
-
-
+    
 });
