@@ -107,7 +107,7 @@ var Computer = function (game, playerId, shape, opponentId) {
     };
 
     var tryMoveForWin = function (row, column) {
-        var imaginaryGame = getTempGameWithSameBoard();
+        var imaginaryGame = getImaginaryGameWithTheSameBoard();
         var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
         imaginaRyPlayer.play(row, column);
@@ -119,7 +119,7 @@ var Computer = function (game, playerId, shape, opponentId) {
     };
 
     var tryMoveForMultipleWinOpportunity = function (row, column) {
-        var imaginaryGame = getTempGameWithSameBoard();
+        var imaginaryGame = getImaginaryGameWithTheSameBoard();
         var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
         imaginaRyPlayer.play(row, column);
@@ -130,7 +130,7 @@ var Computer = function (game, playerId, shape, opponentId) {
         return false;
     };
 
-    function getTempGameWithSameBoard() {
+    function getImaginaryGameWithTheSameBoard() {
         var imaginaryGame = new TicTacToe();
         imaginaryGame.setBoard(game.getBoard());
         return imaginaryGame;
