@@ -104,11 +104,6 @@ var TicTacToe = function () {
         };
     };
 
-
-    var getBoard = function () {
-        return board;
-    }
-
     var countMovesInBoard = function () {
         var occupiedCells = 0;
         for (var col = 0; col < 3; col++) {
@@ -121,6 +116,10 @@ var TicTacToe = function () {
         return occupiedCells;
 
     };
+
+    var getBoard = function () {
+        return board;
+    }
 
     var setBoard = function (newBoard) {
         board = newBoard;
