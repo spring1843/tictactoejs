@@ -202,7 +202,7 @@ describe("Player", function () {
                 player2.play(3, 2);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var isOpponentBlocked = board[1][1]  == player1.getShape();
+                var isOpponentBlocked = board[1][1] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });

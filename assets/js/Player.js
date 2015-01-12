@@ -56,7 +56,7 @@ var Player = function (game, playerId) {
             var imaginaryOpponent = new Player(game, getOpponentId());
             var opponentWinningMoves = imaginaryOpponent.getWinningMoves();
             if (opponentWinningMoves.length > 0) {
-                play(opponentWinningMoves[0][0],opponentWinningMoves[0][1]);
+                play(opponentWinningMoves[0][0], opponentWinningMoves[0][1]);
                 isAutoPlayInProgress = false;
             }
         }();
@@ -90,7 +90,7 @@ var Player = function (game, playerId) {
             if (isAutoPlayInProgress == false)
                 return;
             if (game.isCellOccupied(2, 2) == false) {
-                play(2 , 2);
+                play(2, 2);
                 isAutoPlayInProgress = false;
             }
 
@@ -136,7 +136,7 @@ var Player = function (game, playerId) {
         var imaginaryGame = getTempGameWithSameBoard();
         var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
-        imaginaRyPlayer.play(row,column);
+        imaginaRyPlayer.play(row, column);
         var gameStatus = imaginaryGame.getGameStatus();
         game.setBoard(currentBoard);
         if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winnerShape === getShape())
@@ -148,7 +148,7 @@ var Player = function (game, playerId) {
         var imaginaryGame = getTempGameWithSameBoard();
         var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
-        imaginaRyPlayer.play(row,column);
+        imaginaRyPlayer.play(row, column);
         var winningMovesAfterMove = imaginaRyPlayer.getWinningMoves();
         game.setBoard(currentBoard);
         if (winningMovesAfterMove.length > 1)
@@ -212,8 +212,8 @@ var Player = function (game, playerId) {
     return {
         play: play,
         autoPlay: autoPlay,
-        getWinningMoves : getWinningMoves,
-        getForkingMoves : getForkingMoves,
+        getWinningMoves: getWinningMoves,
+        getForkingMoves: getForkingMoves,
         getPlayerFromShape: getPlayerFromShape,
         getShape: getShape,
         getOpponent: getOpponentId

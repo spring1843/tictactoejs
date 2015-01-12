@@ -103,8 +103,8 @@ var TicTacToe = function () {
     };
 
 
-    var getBoard = function(){
-     return board;
+    var getBoard = function () {
+        return board;
     }
 
     var countMovesInBoard = function () {
