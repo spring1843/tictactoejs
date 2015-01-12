@@ -102,13 +102,27 @@ var TicTacToe = function () {
         };
     };
 
-    var getBoard = function () {
-        return board;
-    };
 
+    var getBoard = function(){
+     return board;
+    }
+
+    var countMovesInBoard = function () {
+        var occupiedCells = 0;
+        for (var col = 0; col < 3; col++) {
+            for (var row = 0; row < 3; row++) {
+                if (board[row][col] != null) {
+                    occupiedCells++;
+                }
+            }
+        }
+        return occupiedCells;
+
+    };
 
     var setBoard = function (newBoard) {
         board = newBoard;
+        moves = countMovesInBoard(board);
         checkAfterChange();
     };
 

@@ -53,10 +53,10 @@ var Player = function (game, playerId) {
             if (isAutoPlayInProgress == false)
                 return;
 
-            var opponentPlayer = new Player(game, getOpponentId());
-            var opponentWinningMoves = opponentPlayer.getWinningMoves();
+            var imaginaryOpponent = new Player(game, getOpponentId());
+            var opponentWinningMoves = imaginaryOpponent.getWinningMoves();
             if (opponentWinningMoves.length > 0) {
-                play(opponentWinningMoves[0],opponentWinningMoves[1]);
+                play(opponentWinningMoves[0][0],opponentWinningMoves[0][1]);
                 isAutoPlayInProgress = false;
             }
         }();
@@ -68,7 +68,7 @@ var Player = function (game, playerId) {
 
             var forkingMoves = getForkingMoves();
             if (forkingMoves.length > 0) {
-                play(forkingMoves[0], forkingMoves[1]);
+                play(forkingMoves[0][0], forkingMoves[0][1]);
                 isAutoPlayInProgress = false;
             }
         }();
@@ -78,34 +78,34 @@ var Player = function (game, playerId) {
             if (isAutoPlayInProgress == false)
                 return;
 
-            var opponentPlayer = getOpponentId();
-            var opponentPlayerForkingMoves = getForkingMoves(opponentPlayer);
+            var imaginaryOpponent = new Player(game, getOpponentId());
+            var opponentPlayerForkingMoves = imaginaryOpponent.getForkingMoves();
             if (opponentPlayerForkingMoves.length > 0) {
-                play(opponentPlayerForkingMoves[0], opponentPlayerForkingMoves[1]);
+                play(opponentPlayerForkingMoves[0][0], opponentPlayerForkingMoves[0][1]);
                 isAutoPlayInProgress = false;
             }
         }();
 
-        var autoPlayCenter = function (playerId) {
+        var autoPlayCenter = function () {
             if (isAutoPlayInProgress == false)
                 return;
-            if (game.isCellOccupied(2, 2) === null) {
+            if (game.isCellOccupied(2, 2) == false) {
                 play(2 , 2);
                 isAutoPlayInProgress = false;
             }
 
-        }(playerId);
+        }();
 
-        var autoPlayFillTheLastPossibleCell = function (playerId) {
+        var autoPlayFillTheLastPossibleCell = function () {
             if (isAutoPlayInProgress == false)
                 return;
 
             var allPossibleMoves = getAllPossibleMoves();
             if (allPossibleMoves.length === 1) {
-                play(allPossibleMoves[0], allPossibleMoves[1]);
+                play(allPossibleMoves[0][0], allPossibleMoves[0][1]);
                 isAutoPlayInProgress = false;
             }
-        }(playerId);
+        }();
     };
 
     var getShape = function () {
@@ -134,8 +134,9 @@ var Player = function (game, playerId) {
 
     var tryMoveForWin = function (row, column) {
         var imaginaryGame = getTempGameWithSameBoard();
+        var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
-        play(row,column);
+        imaginaRyPlayer.play(row,column);
         var gameStatus = imaginaryGame.getGameStatus();
         game.setBoard(currentBoard);
         if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winnerShape === getShape())
@@ -145,9 +146,10 @@ var Player = function (game, playerId) {
 
     var tryMoveForMultipleWinOpportunity = function (row, column) {
         var imaginaryGame = getTempGameWithSameBoard();
+        var imaginaRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
-        play(row,column);
-        var winningMovesAfterMove = getWinningMoves();
+        imaginaRyPlayer.play(row,column);
+        var winningMovesAfterMove = imaginaRyPlayer.getWinningMoves();
         game.setBoard(currentBoard);
         if (winningMovesAfterMove.length > 1)
             return true;
@@ -170,7 +172,6 @@ var Player = function (game, playerId) {
     var getForkingMoves = function () {
         var forkMoves = [];
         var allPossibleMoves = getAllPossibleMoves();
-
         for (i in allPossibleMoves) {
             var possibleMove = allPossibleMoves[i];
             if (tryMoveForMultipleWinOpportunity(possibleMove[0], possibleMove[1]) === true) {
@@ -180,7 +181,6 @@ var Player = function (game, playerId) {
         return forkMoves;
     };
 
-
     function getTempGameWithSameBoard() {
         var imaginaryGame = new TicTacToe();
         imaginaryGame.setBoard(game.getBoard());
@@ -188,17 +188,17 @@ var Player = function (game, playerId) {
     }
 
     var getAllPossibleMoves = function () {
+        var board = game.getBoard();
         var allPossibleMoves = [];
         for (var row = 0; row < 3; row++) {
             for (var col = 0; col < 3; col++) {
-                if (game.getBoard()[row][col] === null) {
+                if (board[row][col] === null) {
                     allPossibleMoves.push([row + 1, col + 1]);
                 }
             }
         }
         return allPossibleMoves;
     };
-
 
     var getBoardClone = function () {
         board = game.getBoard();
@@ -213,6 +213,7 @@ var Player = function (game, playerId) {
         play: play,
         autoPlay: autoPlay,
         getWinningMoves : getWinningMoves,
+        getForkingMoves : getForkingMoves,
         getPlayerFromShape: getPlayerFromShape,
         getShape: getShape,
         getOpponent: getOpponentId

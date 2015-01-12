@@ -214,7 +214,7 @@ describe("TicTacToe", function () {
                     player1 = new Player(ticTacToe, 1);
                     player1.autoPlay();
                     var board = ticTacToe.getBoard();
-                    var shape = 'x';
+                    var shape = player1.getShape();
                     var isCornerOrCellOccupied = board[0][0] == shape || board[0][2] == shape || board[1][1] == shape || board[2][0] == shape || board[2][2] == shape;
                     expect(isCornerOrCellOccupied).toBeTruthy();
                 }
@@ -231,12 +231,8 @@ describe("TicTacToe", function () {
             it("Game is won when a vertical 1 win is possible", function () {
                 player1.play(1, 1);
                 player2.play(1, 2);
-                player1.play(1, 3);
+                player1.play(3, 1);
                 player2.play(2, 2);
-                player1.play(3, 2);
-                player2.play(2, 3);
-                player1.play(2, 1);
-                player2.play(3, 3);
                 player1.autoPlay();
                 expect(ticTacToe.getGameStatus().isGameOver).toBeTruthy();
                 expect(ticTacToe.getGameStatus().gameResult).toEqual('win');
@@ -300,8 +296,7 @@ describe("TicTacToe", function () {
                 player2.play(2, 1);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[1][2] == shape;
+                var isOpponentBlocked = board[1][2] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
@@ -312,8 +307,7 @@ describe("TicTacToe", function () {
                 player2.play(2, 3);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[1][1] == shape;
+                var isOpponentBlocked = board[1][1] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
@@ -323,8 +317,7 @@ describe("TicTacToe", function () {
                 player1.play(3, 1);
                 player2.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'o';
-                var isOpponentBlocked = board[0][2] == shape;
+                var isOpponentBlocked = board[0][2] == player2.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
@@ -335,8 +328,7 @@ describe("TicTacToe", function () {
                 player2.play(3, 1);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[1][1] == shape;
+                var isOpponentBlocked = board[1][1] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
@@ -355,8 +347,7 @@ describe("TicTacToe", function () {
                 player2.play(3, 3);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[2][0] == shape || board[1][0] == shape;
+                var isOpponentBlocked = board[2][0] == player1.getShape() || board[1][0] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
@@ -367,8 +358,7 @@ describe("TicTacToe", function () {
                 player2.play(1, 3);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[0][0] == shape || board[1][0] == shape;
+                var isOpponentBlocked = board[0][0] == player1.getShape() || board[1][0] == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
@@ -386,8 +376,7 @@ describe("TicTacToe", function () {
                 player1.play(1, 3);
                 player2.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'o';
-                var isOpponentBlocked = board[0][0] == shape || board[2][2] == shape;
+                var isOpponentBlocked = board[0][0] == player2.getShape() || board[2][2] == player2.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
@@ -397,8 +386,7 @@ describe("TicTacToe", function () {
                 player1.play(3, 3);
                 player2.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'o';
-                var isOpponentBlocked = board[0][2] == shape || board[2][0] == shape;
+                var isOpponentBlocked = board[0][2] == player2.getShape() || board[2][0] == player2.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
@@ -406,6 +394,8 @@ describe("TicTacToe", function () {
         describe("and center is not occupied", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
+                player1 = new Player(ticTacToe, 1);
+                player2 = new Player(ticTacToe, 2);
             });
 
             it("play center", function () {
@@ -413,8 +403,7 @@ describe("TicTacToe", function () {
                 player2.play(3, 2);
                 player1.autoPlay();
                 var board = ticTacToe.getBoard();
-                var shape = 'x';
-                var isOpponentBlocked = board[1][1]  == shape;
+                var isOpponentBlocked = board[1][1]  == player1.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
@@ -440,7 +429,7 @@ describe("TicTacToe", function () {
                 expect(ticTacToe.getGameStatus().gameResult).toEqual('draw');
                 expect(ticTacToe.getGameStatus().winnerLineType).toEqual(null);
                 expect(ticTacToe.getGameStatus().winnerLineNumber).toEqual(null);
-                expect(ticTacToe.getGameStatus().winner).toEqual(null);
+                expect(ticTacToe.getGameStatus().winnerShape).toEqual(null);
             });
         });
 
