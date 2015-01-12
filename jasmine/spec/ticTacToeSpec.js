@@ -153,7 +153,6 @@ describe("TicTacToe", function () {
         });
     });
 
-
     describe("When there is a draw", function () {
         beforeEach(function () {
             ticTacToe = new TicTacToe();

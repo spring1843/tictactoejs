@@ -44,7 +44,7 @@ var TicTacToe = function () {
                     finalizeDiscovery('win', 'horizontal', row + 1, board[row][0]);
                 }
             }
-        }();
+        };
 
         var discoverVerticalWin = function () {
             if (isGameOver === true)
@@ -55,7 +55,7 @@ var TicTacToe = function () {
                     finalizeDiscovery('win', 'vertical', col + 1, board[0][col]);
                 }
             }
-        }();
+        };
 
         var discoverDiagonalWin = function () {
             if (isGameOver === true)
@@ -68,7 +68,11 @@ var TicTacToe = function () {
             if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
                 finalizeDiscovery('win', 'diagonal', 2, board[1][1]);
             }
-        }();
+        };
+
+        discoverHorizontalWin();
+        discoverVerticalWin();
+        discoverDiagonalWin();
     };
 
     var discoverADraw = function () {
