@@ -63,22 +63,23 @@ var Computer = function (game, playerId, shape, opponentId) {
     }
 
     var getAllPossibleForkType2BlockingMove = function () {
-        var randomForkType2BlockingMoves = [
+        var allRandomForkType2BlockingMoves = [
             [1, 2],
             [2, 1],
             [3, 2],
             [2, 3]
         ];
 
+        var randomForkType2BlockingMoves = [];
 
-        for (var i in randomForkType2BlockingMoves)
-            if (game.isCellOccupied(randomForkType2BlockingMoves[i][0], randomForkType2BlockingMoves[i][1]) === true)
-                randomForkType2BlockingMoves.splice(i, 1);
+        for (var i in allRandomForkType2BlockingMoves)
+            if (game.isCellOccupied(allRandomForkType2BlockingMoves[i][0], allRandomForkType2BlockingMoves[i][1]) === false)
+                randomForkType2BlockingMoves.push(allRandomForkType2BlockingMoves[i]);
 
         return randomForkType2BlockingMoves;
     }
 
-    var getForkMovesWithWinningOppurtunities = function(randomForkType2BlockingMoves){
+    var getForkMovesWithWinningOpportunities = function(randomForkType2BlockingMoves){
         for (var i in randomForkType2BlockingMoves) {
             var imaginaryGame = getImaginaryGameWithTheSameBoard();
             var imaginaryPlayer = new Player(imaginaryGame, playerId);
@@ -90,8 +91,8 @@ var Computer = function (game, playerId, shape, opponentId) {
     }
 
     var getRandomForkType2BlockingMove = function () {
-        var randomForkType2BlockingMoves = getAllPossibleForkType2BlockingMove();
-        var forkMovesWithWinningOpportunities = getForkMovesWithWinningOppurtunities(randomForkType2BlockingMoves);
+        var allForkType2BlockingMoves = getAllPossibleForkType2BlockingMove();
+        var forkMovesWithWinningOpportunities = getForkMovesWithWinningOpportunities(allForkType2BlockingMoves);
         var randomForkType2BlockingMove = forkMovesWithWinningOpportunities[Math.floor(Math.random() * forkMovesWithWinningOpportunities.length)];
         return {row: randomForkType2BlockingMove[0], column: randomForkType2BlockingMove[1]};
     }
