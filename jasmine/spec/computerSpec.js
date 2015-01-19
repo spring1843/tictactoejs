@@ -169,7 +169,7 @@ describe("Computer", function () {
                 player2 = new Player(ticTacToe, 2);
             });
 
-            it("Left fork opportunity for opponent is blocked", function () {
+            it("Left fork type 1 opportunity for opponent is blocked", function () {
                 player1.play(2, 2);
                 player2.play(3, 1);
                 player1.play(1, 3);
@@ -179,13 +179,33 @@ describe("Computer", function () {
                 expect(isOpponentBlocked).toBeTruthy();
             });
 
-            it("Right fork opportunity for opponent is blocked", function () {
+            it("Right fork type 1 opportunity for opponent is blocked", function () {
                 player1.play(2, 2);
                 player2.play(1, 1);
                 player1.play(3, 3);
                 player2.autoPlay();
                 var board = ticTacToe.getBoard();
                 var isOpponentBlocked = board[0][2] == player2.getShape() || board[2][0] == player2.getShape();
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Left fork type 2 opportunity for opponent is blocked", function () {
+                player1.play(1, 3);
+                player2.play(2, 2);
+                player1.play(3, 1);
+                player2.autoPlay();
+                var board = ticTacToe.getBoard();
+                var isOpponentBlocked = board[0][1] == player2.getShape() || board[1][0] == player2.getShape() || board[2][1] == player2.getShape() || board[1][2] == player2.getShape();
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Right fork type 2 opportunity for opponent is blocked", function () {
+                player1.play(1, 1);
+                player2.play(2, 2);
+                player1.play(3, 3);
+                player2.autoPlay();
+                var board = ticTacToe.getBoard();
+                var isOpponentBlocked = board[0][1] == player2.getShape() || board[1][0] == player2.getShape() || board[2][1] == player2.getShape() || board[1][2] == player2.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
         });
