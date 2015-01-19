@@ -9,37 +9,35 @@ var Player = function (game, playerId) {
     };
 
     var getShape = function () {
-        if (playerId === 1) {
+        if (playerId === 1)
             return 'x';
-        } else {
+        else
             return 'o';
-        }
+
     };
 
     var getPlayerFromShape = function (shape) {
-        if (shape === 'x') {
+        if (shape === 'x')
             return 1;
-        } else {
+        else
             return 2;
-        }
     };
 
     var getOpponentId = function () {
-        if (playerId === 1) {
+        if (playerId === 1)
             return 2;
-        } else {
+        else
             return 1;
-        }
     };
 
     var computer = new Computer(game, playerId, getShape(), getOpponentId());
 
     var autoPlay = function () {
         var hint = computer.hint();
-        if (hint === null) {
+        if (hint === null)
             throw new exceptions.ComputerCouldNotHint();
-        }
-        play(hint.row, hint.column);
+        else
+            play(hint.row, hint.column);
     }
 
     var exceptions = {
@@ -52,7 +50,7 @@ var Player = function (game, playerId) {
         play: play,
         autoPlay: autoPlay,
         computer: computer,
-        hint : computer.hint,
+        hint: computer.hint,
         exceptions: exceptions,
         getWinningMoves: computer.getWinningMoves,
         getForkingMoves: computer.getForkingMoves,

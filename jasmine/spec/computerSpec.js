@@ -207,6 +207,22 @@ describe("Computer", function () {
             });
         });
 
+        describe("and a corner is not occupied", function () {
+            beforeEach(function () {
+                ticTacToe = new TicTacToe();
+                player1 = new Player(ticTacToe, 1);
+                player2 = new Player(ticTacToe, 2);
+            });
+
+            it("play corner", function () {
+                player2.play(2, 2);
+                player1.autoPlay();
+                var board = ticTacToe.getBoard();
+                var isOpponentBlocked = board[0][0] == player1.getShape() || board[2][2] == player1.getShape() || board[0][2] == player1.getShape() || board[2][0] == player1.getShape();
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+        });
+
         describe("and it's the last turn in the game", function () {
             beforeEach(function () {
                 ticTacToe = new TicTacToe();
