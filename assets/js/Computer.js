@@ -50,33 +50,52 @@ var Computer = function (game, playerId, shape, opponentId) {
         return null;
     }
 
-    var autoPlayToBlockForkType1 = function () {
+    var autoPlayToBlockFork = function () {
         var imaginaryOpponent = new Player(game, opponentId);
         var opponentPlayerForkingMoves = imaginaryOpponent.computer.getForkingMoves();
-        if (opponentPlayerForkingMoves.length > 0 && imaginaryOpponent.computer.getForkType() == 1)
-            return {row: opponentPlayerForkingMoves[0][0], column: opponentPlayerForkingMoves[0][1]};
+        if (opponentPlayerForkingMoves.length > 0)
+            if (imaginaryOpponent.computer.getForkType() == 1)
+                return {row: opponentPlayerForkingMoves[0][0], column: opponentPlayerForkingMoves[0][1]};
+            else
+                return getRandomForkType2BlockingMove();
 
         return null;
     }
 
-    var autoPlayToBlockForkType2 = function () {
-        var imaginaryOpponent = new Player(game, opponentId);
-        var opponentPlayerForkingMoves = imaginaryOpponent.computer.getForkingMoves();
-        if (opponentPlayerForkingMoves.length > 0 && imaginaryOpponent.computer.getForkType() == 2){
+    var getAllPossibleForkType2BlockingMove = function () {
+        var randomForkType2BlockingMoves = [
+            [1, 2],
+            [2, 1],
+            [3, 2],
+            [2, 3]
+        ];
 
-            var randomForkType2BlockingMoves = [
-                [1, 2],
-                [2, 1],
-                [3, 2],
-                [2, 3]
-            ];
 
-            var randomForkType2BlockingMove = randomForkType2BlockingMoves[Math.floor(Math.random() * randomForkType2BlockingMoves.length)];
-            return {row: randomForkType2BlockingMove[0], column: randomForkType2BlockingMove[1]};
+        for (var i in randomForkType2BlockingMoves)
+            if (game.isCellOccupied(randomForkType2BlockingMoves[i][0], randomForkType2BlockingMoves[i][1]) === true)
+                randomForkType2BlockingMoves.splice(i, 1);
+
+        return randomForkType2BlockingMoves;
+    }
+
+    var getForkMovesWithWinningOppurtunities = function(randomForkType2BlockingMoves){
+        for (var i in randomForkType2BlockingMoves) {
+            var imaginaryGame = getImaginaryGameWithTheSameBoard();
+            var imaginaryPlayer = new Player(imaginaryGame, playerId);
+            imaginaryPlayer.play(randomForkType2BlockingMoves[i][0], randomForkType2BlockingMoves[i][1]);
+            if (imaginaryPlayer.getWinningMoves().length === 0)
+                randomForkType2BlockingMoves.splice(i, 1);
         }
-
-        return null;
+        return randomForkType2BlockingMoves;
     }
+
+    var getRandomForkType2BlockingMove = function () {
+        var randomForkType2BlockingMoves = getAllPossibleForkType2BlockingMove();
+        var forkMovesWithWinningOpportunities = getForkMovesWithWinningOppurtunities(randomForkType2BlockingMoves);
+        var randomForkType2BlockingMove = forkMovesWithWinningOpportunities[Math.floor(Math.random() * forkMovesWithWinningOpportunities.length)];
+        return {row: randomForkType2BlockingMove[0], column: randomForkType2BlockingMove[1]};
+    }
+
 
     var autoPlayCenter = function () {
         if (game.isCellOccupied(2, 2) == false)
@@ -138,7 +157,7 @@ var Computer = function (game, playerId, shape, opponentId) {
         for (i in allPossibleMoves) {
             var possibleMove = allPossibleMoves[i];
             if (tryMoveForMultipleWinOpportunity(possibleMove[0], possibleMove[1]) === true)
-                    forkMoves.push(possibleMove);
+                forkMoves.push(possibleMove);
 
         }
         return forkMoves;
@@ -146,7 +165,7 @@ var Computer = function (game, playerId, shape, opponentId) {
 
     var getForkType = function () {
         var board = game.getBoard();
-        if(board[1][1] != null && board[1][1] != shape)
+        if (board[1][1] != null && board[1][1] != shape)
             return 2;
         else
             return 1;
@@ -154,9 +173,9 @@ var Computer = function (game, playerId, shape, opponentId) {
 
     var tryMoveForWin = function (row, column) {
         var imaginaryGame = getImaginaryGameWithTheSameBoard();
-        var imaginaRyPlayer = new Player(imaginaryGame, playerId);
+        var imagineRyPlayer = new Player(imaginaryGame, playerId);
         var currentBoard = getBoardClone();
-        imaginaRyPlayer.play(row, column);
+        imagineRyPlayer.play(row, column);
         var gameStatus = imaginaryGame.getGameStatus();
         game.setBoard(currentBoard);
         if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winnerShape === shape)
@@ -178,7 +197,7 @@ var Computer = function (game, playerId, shape, opponentId) {
 
     function getImaginaryGameWithTheSameBoard() {
         var imaginaryGame = new TicTacToe();
-        imaginaryGame.setBoard(game.getBoard());
+        imaginaryGame.setBoard(getBoardClone());
         return imaginaryGame;
     }
 
@@ -209,11 +228,7 @@ var Computer = function (game, playerId, shape, opponentId) {
         if (hint != null)
             return hint;
 
-        hint = autoPlayToBlockForkType1();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToBlockForkType2();
+        hint = autoPlayToBlockFork();
         if (hint != null)
             return hint;
 
@@ -236,6 +251,6 @@ var Computer = function (game, playerId, shape, opponentId) {
         hint: hint,
         getWinningMoves: getWinningMoves,
         getForkingMoves: getForkingMoves,
-        getForkType:getForkType
+        getForkType: getForkType
     }
 };
