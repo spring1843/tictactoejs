@@ -208,6 +208,26 @@ describe("Computer", function () {
                 var isOpponentBlocked = board[0][1] == player2.getShape() || board[1][0] == player2.getShape() || board[2][1] == player2.getShape() || board[1][2] == player2.getShape();
                 expect(isOpponentBlocked).toBeTruthy();
             });
+
+            it("Left fork type 3 opportunity for opponent is blocked", function () {
+                player1.play(1, 2);
+                player2.play(2, 2);
+                player1.play(2, 1);
+                player2.autoPlay();
+                var board = ticTacToe.getBoard();
+                var isOpponentBlocked = board[0][0] == player2.getShape() ;
+                expect(isOpponentBlocked).toBeTruthy();
+            });
+
+            it("Right fork type 3 opportunity for opponent is blocked", function () {
+                player1.play(3, 2);
+                player2.play(2, 2);
+                player1.play(2, 3);
+                player2.autoPlay();
+                var board = ticTacToe.getBoard();
+                var isOpponentBlocked = board[2][2] == player2.getShape();
+                expect(isOpponentBlocked).toBeTruthy();
+            });
         });
 
         describe("and center is not occupied", function () {
