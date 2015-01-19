@@ -14,9 +14,9 @@
 		<div class="cover-container" ng-controller="MainController">
 			<div class="inner cover"  >
 
-				<div id="board">
-					<p ng-repeat="boardRow in board">
-						<button ng-click="playForUser([board.indexOf(boardRow) + 1, $index + 1])" ng-repeat-start="boardCell in boardRow track by $index" class="btn btn-large">{{getCellShape(boardCell)}}</button> <span ng-repeat-end></span>
+				<div>
+					<p id="board"  ng-repeat="boardRow in board">
+						<button ng-click="playForUser([board.indexOf(boardRow) + 1, $index + 1])" ng-repeat-start="boardCell in boardRow track by $index" class="btn btn-primary btn-lg">{{getCellShape(boardCell)}}</button> <span ng-repeat-end></span>
 					</p>
 				</div>
 
@@ -30,8 +30,11 @@
 					<div class="inner" ng-show="gameStatus.isGameOver === true">
 						Game resulted in a <b>{{gameStatus.gameResult}}</b><br/>
 						<span ng-show="gameStatus.winnerShape != null">{{gameStatus.winnerShape}} is the winner</span><br/>
-						<a ng-click="playAgain()">Play Again</a>
 					</div>
+					<div class="inner">
+						<a href="#" ng-click="playAgain()">Play Again</a>
+					</div>
+
 				</div>
 			</div>
 

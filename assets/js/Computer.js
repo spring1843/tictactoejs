@@ -19,7 +19,7 @@ var Computer = function (game, playerId, shape, opponentId) {
 
         var randomFirstMove = firstMoves[Math.floor(Math.random() * firstMoves.length)];
         return {row: randomFirstMove[0], column: randomFirstMove[1]};
-    };
+    }
 
     var autoPlayToWinWithOneMove = function () {
         var winningMoves = getWinningMoves();
@@ -27,7 +27,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             return {row: winningMoves[0][0], column: winningMoves[0][1]};
 
         return null;
-    };
+    }
 
     var autoPlayToBlockWinningOpponent = function () {
         var imaginaryOpponent = new Player(game, opponentId);
@@ -36,7 +36,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             return {row: opponentWinningMoves[0][0], column: opponentWinningMoves[0][1]};
 
         return null;
-    };
+    }
 
     var autoPlayToFork = function () {
         var forkingType1Moves = getForkingMoves(1);
@@ -48,7 +48,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             return {row: forkingType2Moves[0][0], column: forkingType2Moves[0][1]};
 
         return null;
-    };
+    }
 
     var autoPlayToBlockForkType1 = function () {
         var imaginaryOpponent = new Player(game, opponentId);
@@ -57,7 +57,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             return {row: opponentPlayerForkingMoves[0][0], column: opponentPlayerForkingMoves[0][1]};
 
         return null;
-    };
+    }
 
     var autoPlayToBlockForkType2 = function () {
         var imaginaryOpponent = new Player(game, opponentId);
@@ -76,14 +76,14 @@ var Computer = function (game, playerId, shape, opponentId) {
         }
 
         return null;
-    };
+    }
 
     var autoPlayCenter = function () {
         if (game.isCellOccupied(2, 2) == false)
             return {row: 2, column: 2};
 
         return null;
-    };
+    }
 
     var autoPlayCorner = function () {
         if (game.isCellOccupied(1, 1) == false)
@@ -99,14 +99,14 @@ var Computer = function (game, playerId, shape, opponentId) {
             return {row: 3, column: 1};
 
         return null;
-    };
+    }
 
     var autoPlayFillTheLastPossibleCell = function () {
         var allPossibleMoves = getAllPossibleMoves();
         if (allPossibleMoves.length === 1)
             return {row: allPossibleMoves[0][0], column: allPossibleMoves[0][1]};
 
-    };
+    }
 
     var getAllPossibleMoves = function () {
         var board = game.getBoard();
@@ -119,7 +119,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             }
         }
         return allPossibleMoves;
-    };
+    }
 
     var getWinningMoves = function () {
         var winningMoves = [];
@@ -130,7 +130,7 @@ var Computer = function (game, playerId, shape, opponentId) {
                 winningMoves.push(possibleMove);
         }
         return winningMoves;
-    };
+    }
 
     var getForkingMoves = function () {
         var forkMoves = [];
@@ -142,7 +142,7 @@ var Computer = function (game, playerId, shape, opponentId) {
 
         }
         return forkMoves;
-    };
+    }
 
     var getForkType = function () {
         var board = game.getBoard();
@@ -162,7 +162,7 @@ var Computer = function (game, playerId, shape, opponentId) {
         if (gameStatus.isGameOver === true && gameStatus.gameResult === 'win' && gameStatus.winnerShape === shape)
             return true;
         return false;
-    };
+    }
 
     var tryMoveForMultipleWinOpportunity = function (row, column) {
         var imaginaryGame = getImaginaryGameWithTheSameBoard();
@@ -174,7 +174,7 @@ var Computer = function (game, playerId, shape, opponentId) {
         if (winningMovesAfterMove.length > 1)
             return true;
         return false;
-    };
+    }
 
     function getImaginaryGameWithTheSameBoard() {
         var imaginaryGame = new TicTacToe();
@@ -190,7 +190,7 @@ var Computer = function (game, playerId, shape, opponentId) {
             [board[1][0], board[1][1], board[1][2]],
             [board[2][0], board[2][1], board[2][2]]
         ];
-    };
+    }
 
     var hint = function () {
         var hint = autoPlayFirstMove();

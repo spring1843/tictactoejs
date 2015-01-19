@@ -6,7 +6,7 @@ var Player = function (game, playerId) {
     var play = function (row, column) {
         var shape = getShape();
         game.changeCell(row, column, shape);
-    };
+    }
 
     var getShape = function () {
         if (playerId === 1)
@@ -14,21 +14,21 @@ var Player = function (game, playerId) {
         else
             return 'o';
 
-    };
+    }
 
     var getPlayerFromShape = function (shape) {
         if (shape === 'x')
             return 1;
         else
             return 2;
-    };
+    }
 
     var getOpponentId = function () {
         if (playerId === 1)
             return 2;
         else
             return 1;
-    };
+    }
 
     var computer = new Computer(game, playerId, getShape(), getOpponentId());
 
@@ -44,7 +44,7 @@ var Player = function (game, playerId) {
         ComputerCouldNotHint: function () {
             throw new Error("Computer could not hint");
         }
-    };
+    }
 
     return {
         play: play,

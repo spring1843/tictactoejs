@@ -57,7 +57,6 @@ body {
   padding: 30px;
 }
 
-
 /*
  * Header
  */
@@ -113,6 +112,8 @@ body {
 }
 .cover .btn-lg {
   padding: 10px 20px;
+  width: 100px;
+  height:100px;
   font-weight: bold;
 }
 
@@ -159,4 +160,8 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+#board {
+  margin: 0 0 5px !important;
 }

@@ -22,7 +22,7 @@
 
         $scope.getCellShape = function (boardCell) {
             if (boardCell === null)
-                return '+';
+                return '';
             else
                 return boardCell;
         }

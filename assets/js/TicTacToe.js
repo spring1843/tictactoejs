@@ -82,14 +82,14 @@ var TicTacToe = function () {
         winnerLineNumber = lineNumber;
         winnerShape = playerShape;
         isGameOver = true;
-    };
+    }
 
     var isCellOccupied = function (row, col) {
         if (board[row - 1][col - 1] === null)
             return false;
         else
             return true;
-    };
+    }
 
     var getGameStatus = function () {
         return {
@@ -100,7 +100,7 @@ var TicTacToe = function () {
             winnerLineType: winnerLineType,
             winnerLineNumber: winnerLineNumber
         };
-    };
+    }
 
     var countMovesInBoard = function () {
         var occupiedCells = 0;
@@ -112,8 +112,7 @@ var TicTacToe = function () {
             }
         }
         return occupiedCells;
-
-    };
+    }
 
     var getBoard = function () {
         return board;
@@ -123,7 +122,7 @@ var TicTacToe = function () {
         board = newBoard;
         moves = countMovesInBoard(board);
         checkAfterChange();
-    };
+    }
 
     var exceptions = {
         PlayingNotPossibleGameIsOver: function () {
@@ -132,7 +131,7 @@ var TicTacToe = function () {
         PlayingNotPossibleCellOccupied: function () {
             throw new Error("Playing is not possible, this cell is occupied");
         }
-    };
+    }
 
     return {
         getBoard: getBoard,
