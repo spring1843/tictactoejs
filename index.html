@@ -20,11 +20,15 @@
 					</p>
 				</div>
 
+
+
 				<div class="mastfoot">
-					<div class="inner" ng-show="gameStatus.isGameOver === true">
+
+					<p class="lead" ng-show="gameStatus.isGameOver === true">
 						Game resulted in a <b>{{gameStatus.gameResult}}</b><br/>
 						<span ng-show="gameStatus.winnerShape != null">{{gameStatus.winnerShape}} is the winner</span><br/>
-					</div>
+					</p>
+
 					<div class="inner">
 						<a href="#" ng-click="playAgain()">Play Again</a>
 					</div>
