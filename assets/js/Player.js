@@ -30,7 +30,14 @@ var Player = function (game, playerId) {
             return 1;
     }
 
-    var computer = new Computer(game, playerId, getShape(), getOpponentId());
+    var getOpponentShape = function(){
+        if (playerId === 1)
+            return 'o';
+        else
+            return 'x';
+    }
+
+    var computer = new Computer(game, playerId, getShape(), getOpponentId(), getOpponentShape());
 
     var autoPlay = function () {
         var hint = computer.hint();

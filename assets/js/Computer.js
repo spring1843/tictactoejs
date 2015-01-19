@@ -1,9 +1,10 @@
-var Computer = function (game, playerId, shape, opponentId) {
+var Computer = function (game, playerId, shape, opponentId, opponentShape) {
 
-    game = game;
-    playerId = playerId;
-    shape = shape;
-    opponentId = opponentId;
+    var game = game;
+    var playerId = playerId;
+    var shape = shape;
+    var opponentId = opponentId;
+    var opponentShape = opponentShape;
 
     var autoPlayFirstMove = function () {
         if (game.getGameStatus().moves > 0)
@@ -164,9 +165,17 @@ var Computer = function (game, playerId, shape, opponentId) {
         return forkMoves;
     }
 
+    var isOpposingCornersOccupiedByShape = function(shape){
+        var board = game.getBoard();
+        if( (board[0][0] === board[2][2] && board[0][0] === shape) || (board[0][2] === board[2][0] && board[0][2] === shape))
+            return true;
+        else
+            return false;
+    }
+
     var getForkType = function () {
         var board = game.getBoard();
-        if (board[1][1] != null && board[1][1] != shape)
+        if (board[1][1] != null && board[1][1] != shape && isOpposingCornersOccupiedByShape(shape) === true)
             return 2;
         else
             return 1;
