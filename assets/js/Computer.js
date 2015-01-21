@@ -93,8 +93,13 @@ var Computer = function (game, playerId, shape, opponentId) {
     var getRandomForkType2BlockingMove = function () {
         var allForkType2BlockingMoves = getAllPossibleForkType2BlockingMove();
         var forkMovesWithWinningOpportunities = getForkMovesWithWinningOpportunities(allForkType2BlockingMoves);
-        var randomForkType2BlockingMove = forkMovesWithWinningOpportunities[Math.floor(Math.random() * forkMovesWithWinningOpportunities.length)];
-        return {row: randomForkType2BlockingMove[0], column: randomForkType2BlockingMove[1]};
+
+        if(forkMovesWithWinningOpportunities.length > 0) {
+            var randomForkType2BlockingMove = forkMovesWithWinningOpportunities[Math.floor(Math.random() * forkMovesWithWinningOpportunities.length)];
+            return {row: randomForkType2BlockingMove[0], column: randomForkType2BlockingMove[1]};
+        }else{
+            return null;
+        }
     }
 
 
@@ -115,11 +120,12 @@ var Computer = function (game, playerId, shape, opponentId) {
         if (game.isCellOccupied(3, 1) == false)
             return {row: 3, column: 1};
 
-        if (game.isCellOccupied(3, 1) == false)
-            return {row: 3, column: 1};
+        if (game.isCellOccupied(3, 3) == false)
+            return {row: 3, column: 3};
 
         return null;
     }
+
 
     var autoPlayFillTheLastPossibleCell = function () {
         var allPossibleMoves = getAllPossibleMoves();
