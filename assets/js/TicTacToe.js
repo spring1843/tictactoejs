@@ -26,7 +26,6 @@ var TicTacToe = function () {
         checkAfterChange();
     };
 
-
     var checkAfterChange = function () {
         discoverAWin();
         discoverADraw();
@@ -63,7 +62,6 @@ var TicTacToe = function () {
 
             if (board[0][2] != null && board[0][2] == board[1][1] && board[0][2] == board[2][0])
                 finalizeDiscovery('win', 'diagonal', 2, board[1][1]);
-
         };
 
         discoverHorizontalWin();

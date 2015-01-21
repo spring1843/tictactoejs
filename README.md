@@ -1,6 +1,6 @@
 #tic-tac-toe-js
 
-Unbeatable tic tac to against computer
+Unbeatable Tic-tac-toe game against computer, written in Javascript and AngularJS
 
 ## Demo
 
