@@ -8,7 +8,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
 
     var autoPlayFirstMove = function () {
         if (game.getGameStatus().moves > 0)
-            return;
+            return false;
 
         var firstMoves = [
             [1, 1],
