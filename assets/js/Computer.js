@@ -228,39 +228,15 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
     }
 
     var hint = function () {
-        var hint = autoPlayFirstMove();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToWinWithOneMove();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToBlockWinningOpponent();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToFork();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToBlockFork();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayCenter();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayCorner();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayFillTheLastPossibleCell();
-        if (hint != null)
-            return hint;
-
-        return null;
+        return 
+            autoPlayFirstMove() || 
+            autoPlayToWinWithOneMove() ||
+            autoPlayToBlockWinningOpponent() ||
+            autoPlayToFork() ||
+            autoPlayToBlockFork() ||
+            autoPlayCenter() ||
+            autoPlayCorner() ||
+            autoPlayFillTheLastPossibleCell();
     }
 
     return {
