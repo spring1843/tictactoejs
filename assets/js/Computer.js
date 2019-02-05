@@ -8,7 +8,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
 
     var autoPlayFirstMove = function () {
         if (game.getGameStatus().moves > 0)
-            return;
+            return false;
 
         var firstMoves = [
             [1, 1],
@@ -27,7 +27,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
         if (winningMoves.length > 0)
             return {row: winningMoves[0][0], column: winningMoves[0][1]};
 
-        return null;
+        return false;
     }
 
     var autoPlayToBlockWinningOpponent = function () {
@@ -36,7 +36,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
         if (opponentWinningMoves.length > 0)
             return {row: opponentWinningMoves[0][0], column: opponentWinningMoves[0][1]};
 
-        return null;
+        return false;
     }
 
     var autoPlayToFork = function () {
@@ -48,7 +48,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
         if (forkingType2Moves.length > 0)
             return {row: forkingType2Moves[0][0], column: forkingType2Moves[0][1]};
 
-        return null;
+        return false;
     }
 
     var autoPlayToBlockFork = function () {
@@ -60,7 +60,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
             else
                 return getRandomForkType2BlockingMove();
 
-        return null;
+        return false;
     }
 
     var getAllPossibleForkType2BlockingMove = function () {
@@ -108,7 +108,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
         if (game.isCellOccupied(2, 2) == false)
             return {row: 2, column: 2};
 
-        return null;
+        return false;
     }
 
     var autoPlayCorner = function () {
@@ -124,7 +124,7 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
         if (game.isCellOccupied(3, 3) == false)
             return {row: 3, column: 3};
 
-        return null;
+        return false;
     }
 
 
@@ -166,7 +166,6 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
             var possibleMove = allPossibleMoves[i];
             if (tryMoveForMultipleWinOpportunity(possibleMove[0], possibleMove[1]) === true)
                 forkMoves.push(possibleMove);
-
         }
         return forkMoves;
     }
@@ -228,39 +227,15 @@ var Computer = function (game, playerId, shape, opponentId, opponentShape) {
     }
 
     var hint = function () {
-        var hint = autoPlayFirstMove();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToWinWithOneMove();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToBlockWinningOpponent();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToFork();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayToBlockFork();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayCenter();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayCorner();
-        if (hint != null)
-            return hint;
-
-        hint = autoPlayFillTheLastPossibleCell();
-        if (hint != null)
-            return hint;
-
-        return null;
+        return 
+            autoPlayFirstMove() || 
+            autoPlayToWinWithOneMove() ||
+            autoPlayToBlockWinningOpponent() ||
+            autoPlayToFork() ||
+            autoPlayToBlockFork() ||
+            autoPlayCenter() ||
+            autoPlayCorner() ||
+            autoPlayFillTheLastPossibleCell();
     }
 
     return {
